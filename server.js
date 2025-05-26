@@ -23,7 +23,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: false,       // для локальної розробки (HTTP)
+    secure: false,
     httpOnly: true,
     sameSite: 'lax'
   }
@@ -33,16 +33,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 require('./src/config/passport'); // Конфігурація стратегій
-
-// Доданий тимчасовий ручний логін для тесту
-app.post('/api/auth/login', (req, res) => {
-  // Підставні дані користувача
-  const fakeUser = { id: 1, name: 'Test User', email: 'test@test.com' };
-  req.login(fakeUser, err => {
-    if (err) return res.status(500).json({ error: 'Login error' });
-    res.json({ message: 'Logged in', user: fakeUser });
-  });
-});
 
 // Маршрут колбеку Google
 app.get('/api/auth/google/callback',
@@ -64,6 +54,7 @@ app.get('/api/auth/user', (req, res) => {
   }
 });
 
+
 // Перевірка з’єднання з базою
 pool.query('SELECT NOW()', (err, res) => {
   if (err) {
@@ -82,5 +73,5 @@ app.use((err, req, res, next) => {
 // Запуск сервера
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(Server running on port ${PORT});
 });
