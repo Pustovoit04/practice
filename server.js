@@ -4,7 +4,8 @@ const dotenv = require('dotenv');const voteRoutes = require('./src/routes/voteRo
 const pool = require('./src/db');
 dotenv.config(); // Завантаження змінних середовища
 const app = express();
-// Налаштування CORS з підтримкою credentialsapp.use(cors({
+// Налаштування CORS з підтримкою credentials
+app.use(cors({
   origin: 'https://practice-try.onrender.com',  
     credentials: true
 }));
