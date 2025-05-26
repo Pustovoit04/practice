@@ -34,6 +34,15 @@ app.use(passport.session());
 
 require('./src/config/passport'); // Конфігурація стратегій
 
+// Маршрут колбеку Google
+app.get('/api/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  (req, res) => {
+    // Після успішної авторизації редіректимось на фронт
+    res.redirect('http://localhost:3000/vote');
+  }
+);
+
 // Основні API маршрути
 app.use('/api', voteRoutes);
 
@@ -45,12 +54,13 @@ app.get('/api/auth/user', (req, res) => {
   }
 });
 
+
 // Перевірка з’єднання з базою
-pool.query('SELECT NOW()', (err, result) => {
+pool.query('SELECT NOW()', (err, res) => {
   if (err) {
     console.error('DB Connection Error:', err.stack);
   } else {
-    console.log('DB Connected Successfully:', result.rows[0]);
+    console.log('DB Connected Successfully:', res.rows[0]);
   }
 });
 
@@ -61,7 +71,7 @@ app.use((err, req, res, next) => {
 });
 
 // Запуск сервера
-const PORT = process.env.PORT  5000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(Server running on port ${PORT});
+  console.log(`Server running on port ${PORT}`);
 });
