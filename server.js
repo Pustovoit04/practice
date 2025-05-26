@@ -19,7 +19,7 @@ app.use(cors({
 app.use(express.json());
 
 app.use(session({
-  secret: process.env.SESSION_SECRET  'your_default_secret',
+  secret: process.env.SESSION_SECRET || 'your_default_secret',
   resave: false,
   saveUninitialized: false,
   cookie: {
