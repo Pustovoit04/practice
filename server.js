@@ -12,7 +12,7 @@ const app = express();
 
 // Налаштування CORS з підтримкою credentials
 app.use(cors({
- origin: 'http://localhost:3000',
+  origin: 'http://localhost:3000',
   credentials: true
 }));
 
@@ -23,7 +23,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: false,
+    secure: false,       // для локальної розробки (HTTP)
     httpOnly: true,
     sameSite: 'lax'
   }
@@ -33,6 +33,16 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 require('./src/config/passport'); // Конфігурація стратегій
+
+// Доданий тимчасовий ручний логін для тесту
+app.post('/api/auth/login', (req, res) => {
+  // Підставні дані користувача
+  const fakeUser = { id: 1, name: 'Test User', email: 'test@test.com' };
+  req.login(fakeUser, err => {
+    if (err) return res.status(500).json({ error: 'Login error' });
+    res.json({ message: 'Logged in', user: fakeUser });
+  });
+});
 
 // Маршрут колбеку Google
 app.get('/api/auth/google/callback',
@@ -53,7 +63,6 @@ app.get('/api/auth/user', (req, res) => {
     res.status(401).json({ user: null });
   }
 });
-
 
 // Перевірка з’єднання з базою
 pool.query('SELECT NOW()', (err, res) => {
