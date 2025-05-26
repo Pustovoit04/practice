@@ -21,7 +21,7 @@ passport.deserializeUser(async (id, done) => {
 passport.use(new FacebookStrategy({
   clientID: process.env.FACEBOOK_APP_ID,
   clientSecret: process.env.FACEBOOK_APP_SECRET,
-  callbackURL: 'https://practice-trly.onrender.com/api/auth/google/callback'
+  callbackURL: 
   profileFields: ['id', 'displayName', 'email']
 },
 async (accessToken, refreshToken, profile, done) => {
@@ -46,7 +46,7 @@ async (accessToken, refreshToken, profile, done) => {
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: 'http://localhost:5000/api/auth/google/callback'
+  callbackURL: 'https://practice-trly.onrender.com/api/auth/google/callback'
 },
 async (accessToken, refreshToken, profile, done) => {
   try {
