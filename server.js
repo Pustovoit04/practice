@@ -10,16 +10,23 @@ dotenv.config(); // Завантаження змінних середовища
 
 const app = express();
 
-// Налаштування CORS з підтримкою credentials
+// Налаштування CORS з підтримкою credentials та кількох джерел
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: (origin, callback) => {
+    const allowedOrigins = ['http://localhost:3000', 'https://practice-try.onrender.com'];
+    if (!origin  allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 
 app.use(express.json());
 
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'your_default_secret',
+  secret: process.env.SESSION_SECRET  'your_default_secret',
   resave: false,
   saveUninitialized: false,
   cookie: {
@@ -31,10 +38,7 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
-
 require('./src/config/passport'); // Конфігурація стратегій
-
-
 
 // Основні API маршрути
 app.use('/api', voteRoutes);
@@ -46,7 +50,6 @@ app.get('/api/auth/user', (req, res) => {
     res.status(401).json({ user: null });
   }
 });
-
 
 // Перевірка з’єднання з базою
 pool.query('SELECT NOW()', (err, res) => {
@@ -66,5 +69,5 @@ app.use((err, req, res, next) => {
 // Запуск сервера
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(Server running on port ${PORT});
 });
