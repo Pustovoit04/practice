@@ -34,14 +34,7 @@ app.use(passport.session());
 
 require('./src/config/passport'); // Конфігурація стратегій
 
-// Маршрут колбеку Google
-app.get('/api/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/login' }),
-  (req, res) => {
-    // Після успішної авторизації редіректимось на фронт
-    res.redirect('http://localhost:3000/vote');
-  }
-);
+
 
 // Основні API маршрути
 app.use('/api', voteRoutes);
