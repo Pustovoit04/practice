@@ -11,7 +11,7 @@ dotenv.config(); // Завантаження змінних середовища
 const app = express();
 const isProduction = process.env.NODE_ENV === 'production';
 const FRONTEND_ORIGIN = isProduction
-  ? https://front-vfhk.onrender.com // ваш домен фронтенду
+  ? 'https://front-vfhk.onrender.com' // ваш домен фронтенду
   : 'http://localhost:3000';
 
 // Налаштування CORS з підтримкою credentials
