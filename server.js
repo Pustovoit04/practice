@@ -12,7 +12,7 @@ const app = express();
 
 // Налаштування CORS з підтримкою credentials
 app.use(cors({
-  origin: 'https://practice-try.onrender.com',
+ origin: 'http://localhost:3000',
   credentials: true
 }));
 
