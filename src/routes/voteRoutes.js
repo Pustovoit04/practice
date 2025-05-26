@@ -3,6 +3,8 @@ const router = express.Router();
 const voteController = require('../controllers/voteController');
 const passport = require('passport');
 
+const FRONTEND_URL = 'https://front-vfhk.onrender.com'; // адреса фронтенду на Render
+
 // --- API для голосування та категорій ---
 router.get('/categories', voteController.getCategories);
 router.post('/categories', voteController.createCategory);
@@ -27,7 +29,7 @@ router.get('/auth/twitter', passport.authenticate('twitter'));
 router.get('/auth/twitter/callback',
   passport.authenticate('twitter', { failureRedirect: '/login' }),
   (req, res) => {
-    res.redirect('http://localhost:3000/vote'); // Після успішного входу
+    res.redirect(`${FRONTEND_URL}/vote`); // Після успішного входу
   }
 );
 
@@ -40,7 +42,7 @@ router.get('/auth/facebook',
 router.get('/auth/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
   (req, res) => {
-    res.redirect('http://localhost:3000/vote'); // Перенаправлення на фронт після входу
+    res.redirect(`${FRONTEND_URL}/vote`); // Перенаправлення на фронт після входу
   }
 );
 
@@ -49,7 +51,7 @@ router.get('/auth/github', passport.authenticate('github', { scope: ['user:email
 router.get('/auth/github/callback',
   passport.authenticate('github', { failureRedirect: '/login' }),
   (req, res) => {
-    res.redirect('http://localhost:3000/vote'); // перенаправлення після входу
+    res.redirect(`${FRONTEND_URL}/vote`); // перенаправлення після входу
   }
 );
 
@@ -58,7 +60,7 @@ router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 
 router.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   (req, res) => {
-    res.redirect('http://localhost:3000/vote'); // Перенаправлення на фронт після входу
+    res.redirect(`${FRONTEND_URL}/vote`); // Перенаправлення на фронт після входу
   }
 );
 
@@ -82,6 +84,5 @@ router.get('/logout', (req, res) => {
     });
   });
 });
-
 
 module.exports = router;
