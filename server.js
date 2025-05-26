@@ -1,3 +1,4 @@
+
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
@@ -73,5 +74,5 @@ app.use((err, req, res, next) => {
 // Запуск сервера
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(Server running on port ${PORT});
+  console.log(`Server running on port ${PORT}`);
 });
