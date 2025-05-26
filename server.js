@@ -1,4 +1,3 @@
-
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
@@ -10,10 +9,14 @@ const pool = require('./src/db');
 dotenv.config(); // Завантаження змінних середовища
 
 const app = express();
+const isProduction = process.env.NODE_ENV === 'production';
+const FRONTEND_ORIGIN = isProduction
+  ? https://front-vfhk.onrender.com // ваш домен фронтенду
+  : 'http://localhost:3000';
 
 // Налаштування CORS з підтримкою credentials
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: FRONTEND_ORIGIN,
   credentials: true
 }));
 
@@ -24,9 +27,9 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: false,
+    secure: isProduction,          // HTTPS для продакшну
     httpOnly: true,
-    sameSite: 'lax'
+    sameSite: isProduction ? 'none' : 'lax' // для cross-site cookies
   }
 }));
 
@@ -39,12 +42,12 @@ require('./src/config/passport'); // Конфігурація стратегій
 app.get('/api/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   (req, res) => {
-    // Після успішної авторизації редіректимось на фронт
-    res.redirect('http://localhost:3000/vote');
+    // Редірект на фронтенд після авторизації
+    res.redirect(`${FRONTEND_ORIGIN}/vote`);
   }
 );
 
-// Основні API маршрути
+// API маршрути
 app.use('/api', voteRoutes);
 
 app.get('/api/auth/user', (req, res) => {
@@ -55,13 +58,12 @@ app.get('/api/auth/user', (req, res) => {
   }
 });
 
-
 // Перевірка з’єднання з базою
-pool.query('SELECT NOW()', (err, res) => {
+pool.query('SELECT NOW()', (err, dbRes) => {
   if (err) {
     console.error('DB Connection Error:', err.stack);
   } else {
-    console.log('DB Connected Successfully:', res.rows[0]);
+    console.log('DB Connected Successfully:', dbRes.rows[0]);
   }
 });
 
